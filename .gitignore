@@ -1,3 +1,8 @@
+.idea/
+node_modules/
+*.sqlite
+*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

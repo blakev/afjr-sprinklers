@@ -1,0 +1,6 @@
+Flask==0.12.1
+gevent==1.2.1
+gevent-websocket==0.10.1
+peewee==2.9.2
+ujson==1.35
+wsaccel==0.6.2
