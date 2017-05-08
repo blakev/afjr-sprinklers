@@ -1,0 +1,43 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <h1>{{ label }} Sensor</h1>
+    <form action="{{ callback }}" method="POST">
+        {{ form.csrf_token }}
+        {% for f in [form.name, form.description, form.type, form.gpio, form.gp_idx] %}
+        <div class="form-group">
+            {{ f.label() }}
+            {{ f(class="form-control") }}
+            <span class="help-block">
+                {{ f.description }}
+            </span>
+            {% if f.errors %}
+                <ul class="text-danger">
+                    {% for e in f.errors %}
+                    <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="checkbox">
+            <label for="active">
+                {{ form.active() }} Sensor is active?
+            </label>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <a href="{{ url_for('index') }}" class="btn btn-danger">Cancel</a>
+                {% if can_delete %}
+                <a href="{{ callback }}?delete=1" class="btn btn-default">Delete</a>
+                {% endif %}
+            </div>
+            <div class="col-xs-6 text-right">
+                <button type="submit" class="btn btn-success">{{ label }} Sensor</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

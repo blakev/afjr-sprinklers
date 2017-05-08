@@ -1,0 +1,111 @@
+{% extends "_base.html" %}
+
+
+{% macro panel(title, content, subtitle=None) %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            {{ title }}
+        </div>
+        {% if subtitle %}
+            {{ subtitle }}
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {{ content }}
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro datas_table() %}
+    <table class="table table-condensed table-hover">
+
+    </table>
+{% endmacro %}
+
+
+{% macro event_table() %}
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>event</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in events %}
+            <tr>
+                <td>{{ e }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% macro sensor_table() %}
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Type</th>
+                <th>GPIO</th>
+                <th>GPIO-IDX</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sensors %}
+            <tr class="{{ 'active' if not s.active else '' }}">
+                <td>{{ loop.index }}</td>
+                <td>
+                    <a href="{{ url_for('edit_sensor', alias=s.alias) }}">
+                        {{ s.name }}
+                    </a>
+                </td>
+                <td>
+                    {% set c = 'fa-check text-success' if s.active else 'fa-close text-danger' %}
+                    <i class="fa {{ c }}"></i>
+                </td>
+                <td>{{ s.type.value }}</td>
+                <td>{{ s.gpio }}</td>
+                <td>
+                    {% if not s.gp_idx %}
+                    <span class="text-muted">
+                        {{ s.gp_idx }}
+                    </span>
+                    {% else %}
+                        {{ s.gp_idx }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% block content %}
+    <h1>index</h1>
+
+    <a href="{{ url_for('add_sensor') }}">Add Sensor</a>
+
+    <hr>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                {{ panel('Sensors', sensor_table(), 'Pins being tracked for reading.') }}
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                {{ panel('Events', event_table(), 'Showing %d of %d events.' % (events | length, stats.event_count)) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                {{ datas_table() }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
